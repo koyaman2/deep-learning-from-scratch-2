@@ -4,10 +4,10 @@ seq2seqの使い方と改善方法（ReverseとPeeky）と用例の紹介<br>
 
 ### 7.3.2. Decoderクラス
 Encoderクラスが出力したhを受け取り、目的とする別の文字列を出力する。<br>
-図7-16<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-16.png)<br>
 <br>
 DecoderはRNNで実現できる。Encoderと同様にLSTMレイヤを使う。<br>
-図7-17<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-17.png)<br>
 <br>
 Decoderの学習時におけるレイヤ構成<br>
 _62という教師データを使うが、このとき入力データは['_', '6', '2', ' ']として与え、<br>
@@ -16,7 +16,7 @@ _62という教師データを使うが、このとき入力データは['_', '6
 今回の問題は「足し算」ということで、確率的な揺れを排除して「決定的」に応えを生成する（最も高いスコアを持つ文字を１つ選択する）。<br>
 <br>
 Decoderに文字列を生成させる流れ<br>
-図7-18<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-18.png)<br>
 <br>
 **argmax**<br>
 最大値を取るインデックス（今回の例では文字ID）を選ぶノード。<br>
@@ -197,10 +197,8 @@ for epoch in range(max_epoch):
 ※このメソッドは、問題をモデルに与えて文字列生成を行わせ、それが答えと合っているかどうかを判定する。<br>
 　モデルの出す答えが合っていれば1を返し、間違っていれば0を返す。<br>
  <br>
- 
- こんな結果が表示。<br>
- 
- matplotlibがうまく動かなかった
+ こんな結果が表示。<br> 
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/normal.png)<br>
  
 ## 7.4 seq2seqの改良
 学習の進みを改善する。
@@ -210,6 +208,7 @@ for epoch in range(max_epoch):
 ```
 ```
 図7-24<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
 koyaman環境では最終的にacc 54.080%<br>
 <br>
 勾配の伝播がスムーズになるのが理由っぽい
@@ -248,6 +247,7 @@ model = PeekySeq2seq(vocab_size, wordvec_size, hideen_size)
 ```
 結果めっちゃ改善する。<br>
 図7-28<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/peeky.png)<br>
 ※koyaman環境では最終的に97.600%<br>
 
 ## 7.5 seq2seqを用いたアプリケーション
