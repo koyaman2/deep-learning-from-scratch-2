@@ -98,7 +98,6 @@ generateは引数を3つ取る。
 - **start_id** :最初に与える文字ID
 - **sample_size** :生成する文字数
 文字をひとつずつ与え、Affineレイヤが出力するスコアから最大値を持つ文字IDを選ぶ作業を繰り返し行う。<br>
-
 ### 7.3.3 Seq2seqクラス
 EncoderクラスとDecoderクラスをつなぎ合わせ、そしてTime Softmax with Lossレイヤを使って損失を計算する。<br>
 [ch07/seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/seq2seq.py)<br>
@@ -192,12 +191,11 @@ for epoch in range(max_epoch):
 基本的にはニューラルネットワークの学習用のコードと同じだが、ここでは評価指標として以下を採用する<br>
 **正解率ーいくつの問題に正解できたかー**<br>
 具体的にはエポックごとにテストデータにある問題の中でいくつかの問題に正しく答えられたかを採点する。<br>
-<br>
 正解率を計測するためにcommon/util.pyにあるeval_seq2seq(model, question, correct, id_to_char, verbose, is_reverse)というメソッドを利用している<br>
 ※このメソッドは、問題をモデルに与えて文字列生成を行わせ、それが答えと合っているかどうかを判定する。<br>
 　モデルの出す答えが合っていれば1を返し、間違っていれば0を返す。<br>
  <br>
- こんな結果が表示。<br> 
+こんな結果が表示。(acc 7.720%)<br> 
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/normal.png)<br>
  
 ## 7.4 seq2seqの改良
