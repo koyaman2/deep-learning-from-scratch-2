@@ -248,7 +248,7 @@ model = PeekySeq2seq(vocab_size, wordvec_size, hideen_size)
 ```
 結果めっちゃ改善する。<br>
 図7-28<br>
-koyaman環境では最終的にxx%<br>
+※koyaman環境では最終的に97.600%<br>
 
 ## 7.5 seq2seqを用いたアプリケーション
 seq2seqは「ある時系列データ」→「別の時系列データ」に変換する。
