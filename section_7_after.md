@@ -10,16 +10,16 @@ DecoderはRNNで実現できる。Encoderと同様にLSTMレイヤを使う。<b
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-17.png)<br>
 <br>
 Decoderの学習時におけるレイヤ構成<br>
-_62という教師データを使うが、このとき入力データは['_', '6', '2', ' ']として与え、<br>
+_ 62という教師データを使うが、このとき入力データは ['_ ', '6', '2', ' ']として与え、<br>
 それに対応する出力が['6', '2', ' ', ' ']となるように学習を行う。<br>
 <br>
-今回の問題は「足し算」ということで、確率的な揺れを排除して「決定的」に応えを生成する（最も高いスコアを持つ文字を１つ選択する）。<br>
+今回の問題は「足し算」ということで、確率的な揺れを排除して「決定的」に答えを生成する（最も高いスコアを持つ文字を１つ選択する）。<br>
 <br>
 Decoderに文字列を生成させる流れ<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-18.png)<br>
 <br>
-**argmax**<br>
-最大値を取るインデックス（今回の例では文字ID）を選ぶノード。<br>
+<br>
+**argmax**: 最大値を取るインデックス（今回の例では文字ID）を選ぶノード。<br>
 <br>
 前節で示した文章生成のときの構成と同じ。<br>
 しかし今回はSoftmaxレイヤを使わず、Affineレイヤの出力するスコアを対象に、最大の値を持つ文字IDを選ぶ<br>
@@ -28,7 +28,7 @@ Decoderでは学習時と生成時でSoftmaxレイヤの扱いが異なる。<br
 Softmax with Lossレイヤは、この後に実装するSeq2seqクラスに面倒を見てもらうことにする。<br>
 →Decoderクラスは、Time Softmax with Lossレイヤの前までを担当させる<br>
 <br>
-図7-19<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-19.png)<br>
 <br>
 Decoderクラスは、Time Embedding,Time LSTM, Time Affineの3つのレイヤから構成される<br>
 [ch07/seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/seq2seq.py)<br>
@@ -189,7 +189,7 @@ for epoch in range(max_epoch):
     print('val acc %.3f%%' % (acc * 100))
 ```
 基本的にはニューラルネットワークの学習用のコードと同じだが、ここでは評価指標として以下を採用する<br>
-**正解率ーいくつの問題に正解できたかー**<br>
+**正解率　－いくつの問題に正解できたか－**<br>
 具体的にはエポックごとにテストデータにある問題の中でいくつかの問題に正しく答えられたかを採点する。<br>
 正解率を計測するためにcommon/util.pyにあるeval_seq2seq(model, question, correct, id_to_char, verbose, is_reverse)というメソッドを利用している<br>
 ※このメソッドは、問題をモデルに与えて文字列生成を行わせ、それが答えと合っているかどうかを判定する。<br>
@@ -201,15 +201,19 @@ for epoch in range(max_epoch):
 ## 7.4 seq2seqの改良
 学習の進みを改善する。
 ### 7.4.1 入力データの反転(Reverse)
-図7-23<br>
+- 57+5   →   5+75
+- 628+521 → 125+826
+- 220 + 8 → 8 + 022
 学習用のコードにデータセットを読みこみ、コードを追加
 ```
+# is_reverse = FalseをTrueに変更
+is_reverse = True  # 
 ```
 図7-24<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
 koyaman環境では最終的にacc 54.080%<br>
 <br>
-勾配の伝播がスムーズになるのが理由っぽい
+改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい
 - 「吾輩は猫である」→「I am a cat」
 - 「ある　で　猫　は　吾輩」→「I am a cat」
 ※吾輩とIが隣同士になるため距離が近くなる。
@@ -224,9 +228,51 @@ hを活用<br>
 PeekyDecoderの初期化はDecoderとほとんど同じ<br>
 LSTMレイヤの重みとAffineレイヤの重みの形状が異なる。<br>
 ```
+class PeekyDecoder:
+    def __init__(self, vocab_size, wordvec_size, hidden_size):
+        V, D, H = vocab_size, wordvec_size, hidden_size
+        rn = np.random.randn
+
+        embed_W = (rn(V, D) / 100).astype('f')
+        # LSTMレイヤの重みと形状が異なる
+        lstm_Wx = (rn(H + D, 4 * H) / np.sqrt(H + D)).astype('f')
+        lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
+        lstm_b = np.zeros(4 * H).astype('f')
+        # Affineレイヤの重みの形状が異なる
+        affine_W = (rn(H + H, V) / np.sqrt(H + H)).astype('f')
+        affine_b = np.zeros(V).astype('f')
+
+        self.embed = TimeEmbedding(embed_W)
+        self.lstm = TimeLSTM(lstm_Wx, lstm_Wh, lstm_b, stateful=True)
+        self.affine = TimeAffine(affine_W, affine_b)
+
+        self.params, self.grads = [], []
+        for layer in (self.embed, self.lstm, self.affine):
+            self.params += layer.params
+            self.grads += layer.grads
+        self.cache = None
 ```
 forward()の実装
 ```
+    def forward(self, xs, h):
+        N, T = xs.shape
+        N, H = h.shape
+
+        self.lstm.set_state(h)
+
+        out = self.embed.forward(xs)
+        # 時系列分複製
+        hs = np.repeat(h, T, axis=0).reshape(N, T, H)
+        # 連結
+        out = np.concatenate((hs, out), axis=2)
+        
+        out = self.lstm.forward(out)
+        # 連結
+        out = np.concatenate((hs, out), axis=2)
+
+        score = self.affine.forward(out)
+        self.cache = H
+        return score
 ```
 - hをnp.repeat()で時系列分複製し、それをhsにする。
 - hsをEmbeddingレイヤの出力とnp.concatenate()で連結
