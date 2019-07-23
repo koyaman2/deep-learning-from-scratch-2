@@ -145,6 +145,7 @@ seq2seqの学習は、基本的なニューラルネットワークの学習と�
 <br>
 ここでは1.4.4 Trainerクラスで説明したTrainerクラスを使って、上の作業を行わせる<br>
 またここではエポックごとにseq2seqにテストデータを解かせ(文字列生成を行わせ)、その正解率を計測する<br>
+<br>
 [ch07/train_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/train_seq2seq.py)<br>
 ```
 import sys
@@ -210,7 +211,7 @@ for epoch in range(max_epoch):
 - 628+521 → 125+826
 - 220 + 8 → 8 + 022
 <br>
-学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）
+学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）<br>
 ```
 # is_reverse = FalseをTrueに変更
 is_reverse = True  # 
