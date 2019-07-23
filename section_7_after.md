@@ -142,6 +142,7 @@ seq2seqの学習は、基本的なニューラルネットワークの学習と�
 - 1.学習データからミニバッチを選ぶ
 - 2.ミニバッチから勾配を計算する
 - 3.勾配を使ってパラメータを更新する
+<br>
 ここでは1.4.4 Trainerクラスで説明したTrainerクラスを使って、上の作業を行わせる<br>
 またここではエポックごとにseq2seqにテストデータを解かせ(文字列生成を行わせ)、その正解率を計測する<br>
 [ch07/train_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/train_seq2seq.py)<br>
@@ -208,6 +209,7 @@ for epoch in range(max_epoch):
 - 57+5   →   5+75
 - 628+521 → 125+826
 - 220 + 8 → 8 + 022
+<br>
 学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）
 ```
 # is_reverse = FalseをTrueに変更
@@ -220,14 +222,13 @@ koyaman環境では最終的にacc 54.080%になった<br>
 改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい
 - 「吾輩は猫である」→「I am a cat」
 - 「ある　で　猫　は　吾輩」→「I am a cat」
+<br>
 ※吾輩とIが隣同士になるため距離が近くなる。
 
 ### 7.4.2 覗き見(Peeky)
 Encoderに再度注目。Encoderは入力分を固定長のベクトルhに変換するが、LSTMだけがhを使っているのでもっと使うように活用する。<br>
-hを活用<br>
-図7-26<br>
+こんな感じにhを活用（AffineレイヤとLSTMレイヤにhを与える）図7-26<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-26.png)<br>
-すべての時刻のAffineレイヤとLSTMレイヤにEncoderの出力hを与え、8つのレイヤで共有する。<br>
 2つのベクトルが入力される場合、結合されたものになる。<br>
 [ch07/peeky_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/peeky_seq2seq.py)<br>
 PeekyDecoderの初期化はDecoderとほとんど同じ<br>
@@ -282,6 +283,7 @@ forward()の実装
 - hをnp.repeat()で時系列分複製し、それをhsにする。
 - hsをEmbeddingレイヤの出力とnp.concatenate()で連結
 - 連結したものをLSTMレイヤの入力にする
+<br>
 ※Affineレイヤでも同様にする。<br>
 <br>
 PeekySeq2seqはSeq2seqとほぼ同様<br>
@@ -305,6 +307,7 @@ seq2seqは「ある時系列データ」→「別の時系列データ」に変�
 - **自動要約** :「ある長い文章」→「短い要約された文章」
 - **質疑応答** :「質問」→「答え」
 - **メールの自動返信** :「受け取ったメールの文章」→「返信文章」
+<br>
 seq2seqは2つの対になった時系列データを扱う問題に利用できる。<br>
 一見seq2seqに当てはめられそうにない問題でも、入力・出力データの前処理によって適用できる場合がある
 
