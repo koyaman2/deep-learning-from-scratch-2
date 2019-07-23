@@ -209,6 +209,7 @@ for epoch in range(max_epoch):
 - 57+5   →   5+75
 - 628+521 → 125+826
 - 220 + 8 → 8 + 022
+
 <br>
 学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）<br>
 
@@ -223,6 +224,7 @@ koyaman環境では最終的にacc 54.080%になった<br>
 改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい
 - 「吾輩は猫である」→「I am a cat」
 - 「ある　で　猫　は　吾輩」→「I am a cat」
+
 <br>
 ※吾輩とIが隣同士になるため距離が近くなる。
 
@@ -285,13 +287,14 @@ forward()の実装
 - hをnp.repeat()で時系列分複製し、それをhsにする。
 - hsをEmbeddingレイヤの出力とnp.concatenate()で連結
 - 連結したものをLSTMレイヤの入力にする
+
 <br>
 ※Affineレイヤでも同様にする。<br>
 <br>
 PeekySeq2seqはSeq2seqとほぼ同様<br>
 Decoderレイヤのみ異なる<br>
 [ch07/peeky_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/peeky_seq2seq.py)<br>
-
+<br>
 サンプルコードtrain_seq2seq.pyのseq2seqをPeelySeq2seqに変更
 ```
 # L33とL34のコメントアウトを入れ替え
