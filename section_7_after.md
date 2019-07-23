@@ -274,7 +274,7 @@ forward()の実装
         self.cache = H
         return score
 ```
-<br>
+
 - hをnp.repeat()で時系列分複製し、それをhsにする。
 - hsをEmbeddingレイヤの出力とnp.concatenate()で連結
 - 連結したものをLSTMレイヤの入力にする
