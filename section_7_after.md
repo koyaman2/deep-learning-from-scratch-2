@@ -136,7 +136,6 @@ class Seq2seq(BaseModel):
         return sampled
 ```
 EncoderとDecoderの各クラスで、メインとなる処理はすでに実装されているため、ここではつなぎ合わせるだけ。
-
 ### 7.3.4 seq2seqの評価
 seq2seqの学習は、基本的なニューラルネットワークの学習と同じ流れで行われる。
 - 1.学習データからミニバッチを選ぶ
@@ -201,33 +200,26 @@ for epoch in range(max_epoch):
 　モデルの出す答えが合っていれば1を返し、間違っていれば0を返す。<br>
  <br>
 こんな結果が表示。（acc 7.720%）<br> 
-![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/normal.png)<br>
- 
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/normal.png)<br> 
 ## 7.4 seq2seqの改良
 学習の進みを改善する。
 ### 7.4.1 入力データの反転(Reverse)
 - 57+5   →   5+75
 - 628+521 → 125+826
 - 220 + 8 → 8 + 022
-
-<br>
-学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）<br>
-
+<br>学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）<br>
 ```
 # is_reverse = FalseをTrueに変更
 is_reverse = True  # 
 ```
 <br>
-![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
 koyaman環境では最終的にacc 54.080%になった<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
 <br>
 改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい
 - 「吾輩は猫である」→「I am a cat」
 - 「ある　で　猫　は　吾輩」→「I am a cat」
-
-<br>
-※吾輩とIが隣同士になるため距離が近くなる。
-
+<br>※吾輩とIが隣同士になるため距離が近くなる。
 ### 7.4.2 覗き見(Peeky)
 Encoderに再度注目。Encoderは入力分を固定長のベクトルhに変換するが、LSTMだけがhを使っているのでもっと使うように活用する。<br>
 こんな感じにhを活用（AffineレイヤとLSTMレイヤにhを与える）図7-26<br>
@@ -287,9 +279,7 @@ forward()の実装
 - hをnp.repeat()で時系列分複製し、それをhsにする。
 - hsをEmbeddingレイヤの出力とnp.concatenate()で連結
 - 連結したものをLSTMレイヤの入力にする
-
-<br>
-※Affineレイヤでも同様にする。<br>
+<br>※Affineレイヤでも同様にする。<br>
 <br>
 PeekySeq2seqはSeq2seqとほぼ同様<br>
 Decoderレイヤのみ異なる<br>
@@ -301,25 +291,19 @@ Decoderレイヤのみ異なる<br>
 # model = Seq2seq(vocab_size, wordvec_size, hideen_size)
 model = PeekySeq2seq(vocab_size, wordvec_size, hideen_size)
 ```
-結果めっちゃ改善する。<br>
-図7-28<br>
+結果めっちゃ改善する。koyaman環境では最終的に97.600%になった<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/peeky.png)<br>
-※koyaman環境では最終的に97.600%になった<br>
-
 ## 7.5 seq2seqを用いたアプリケーション
 seq2seqは「ある時系列データ」→「別の時系列データ」に変換する。
 - **機械翻訳** :「ある言語の文章」→「別の言語の文章」
 - **自動要約** :「ある長い文章」→「短い要約された文章」
 - **質疑応答** :「質問」→「答え」
 - **メールの自動返信** :「受け取ったメールの文章」→「返信文章」
-<br>
-seq2seqは2つの対になった時系列データを扱う問題に利用できる。<br>
+<br>seq2seqは2つの対になった時系列データを扱う問題に利用できる。<br>
 一見seq2seqに当てはめられそうにない問題でも、入力・出力データの前処理によって適用できる場合がある
-
 ### 7.5.1 チャットボット
 **「相手の発言」→「自分の発言」**<br>
 対話のテキストデータがあれば、それをseq2seqに学習させることができる。<br>
-
 ### 7.5.2 アルゴリズムの学習
 実験では「足し算」でやっていたが、原理的にはより高度な問題も扱うことができる。<br>
 **「ソースコード」→「ソースコード」**
@@ -340,7 +324,6 @@ input:
  Target: 12184
 ```
 ソースコードも文字で書かれた時系列データであり、何行にもわたるコードであっても、１つの文として処理することができる。<br>
-
 ### 7.5.3 イメージキャプション
 **「画像」→「文章」**
 EncoderがLSTMからCNN(Convolutional Neural Network)に置き換わっただけ。<br>
@@ -349,7 +332,6 @@ Decoderは変わらない<br>
 CNNの出力は特徴マップ（3次元=高さ・幅・チャンネル）。<br>
 これをLSTMが処理できるように1次元にする<br>
 割とイケてる<br>
-
 ## まとめ
 - RNNによる文章生成がテーマだった。
 - 後半はseq2seqで足し算を学習させることをした。
