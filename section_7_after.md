@@ -210,13 +210,13 @@ for epoch in range(max_epoch):
 - 628+521 → 125+826
 - 220 + 8 → 8 + 022
 <br>
-学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）
-<br>
+学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）<br>
+
 ```
 # is_reverse = FalseをTrueに変更
 is_reverse = True  # 
 ```
-図7-24<br>
+<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
 koyaman環境では最終的にacc 54.080%になった<br>
 <br>
