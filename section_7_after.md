@@ -216,6 +216,7 @@ for epoch in range(max_epoch):
 # is_reverse = FalseをTrueに変更
 is_reverse = True  # 
 ```
+
 <br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
 koyaman環境では最終的にacc 54.080%になった<br>
