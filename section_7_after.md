@@ -142,10 +142,8 @@ seq2seqの学習は、基本的なニューラルネットワークの学習と�
 - 1.学習データからミニバッチを選ぶ
 - 2.ミニバッチから勾配を計算する
 - 3.勾配を使ってパラメータを更新する
-<br>
-ここでは1.4.4 Trainerクラスで説明したTrainerクラスを使って、上の作業を行わせる<br>
+<br>ここでは1.4.4 Trainerクラスで説明したTrainerクラスを使って、上の作業を行わせる<br>
 またここではエポックごとにseq2seqにテストデータを解かせ(文字列生成を行わせ)、その正解率を計測する<br>
-<br>
 [ch07/train_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/train_seq2seq.py)<br>
 ```
 import sys
