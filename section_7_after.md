@@ -210,16 +210,14 @@ for epoch in range(max_epoch):
 <br>学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）<br>
 ```
 # is_reverse = FalseをTrueに変更
-is_reverse = True  # 
+is_reverse = True
 ```
-<br>
-koyaman環境では最終的にacc 54.080%になった<br>
+<br>koyaman環境では最終的にacc 54.080%になった<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
-<br>
-改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい
+<br>改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい<br>
 - 「吾輩は猫である」→「I am a cat」
 - 「ある　で　猫　は　吾輩」→「I am a cat」
-<br>※吾輩とIが隣同士になるため距離が近くなる。
+<br>※吾輩とIが隣同士になるため距離が近くなる。<br>
 ### 7.4.2 覗き見(Peeky)
 Encoderに再度注目。Encoderは入力分を固定長のベクトルhに変換するが、LSTMだけがhを使っているのでもっと使うように活用する。<br>
 こんな感じにhを活用（AffineレイヤとLSTMレイヤにhを与える）図7-26<br>
