@@ -193,6 +193,7 @@ for epoch in range(max_epoch):
     print('val acc %.3f%%' % (acc * 100))
 ```
 基本的にはニューラルネットワークの学習用のコードと同じだが、ここでは評価指標として以下を採用する<br>
+<br>
 **正解率　－いくつの問題に正解できたか－**<br>
 具体的にはエポックごとにテストデータにある問題の中でいくつかの問題に正しく答えられたかを採点する。<br>
 正解率を計測するためにcommon/util.pyにあるeval_seq2seq(model, question, correct, id_to_char, verbose, is_reverse)というメソッドを利用している<br>
@@ -209,7 +210,8 @@ for epoch in range(max_epoch):
 - 628+521 → 125+826
 - 220 + 8 → 8 + 022
 <br>
-学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）<br>
+学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）
+<br>
 ```
 # is_reverse = FalseをTrueに変更
 is_reverse = True  # 
