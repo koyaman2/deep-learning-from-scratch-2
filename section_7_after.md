@@ -1,6 +1,6 @@
 # 第7章後半
 ### この範囲をひとことで言うと：
-seq2seqの使い方と改善方法（ReverseとPeeky）と用例の紹介<br>
+seq2seqの使い方と改善方法（ReverseとPeeky）とseq2seqの用例紹介<br>
 
 ### 7.3.2. Decoderクラス
 Encoderクラスが出力したhを受け取り、目的とする別の文字列を出力する。<br>
@@ -222,6 +222,7 @@ koyaman環境では最終的にacc 54.080%<br>
 Encoderに再度注目。Encoderは入力分を固定長のベクトルhに変換するが、LSTMだけがhを使っているのでもっと使うように活用する。<br>
 hを活用<br>
 図7-26<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/.png)<br>
 すべての時刻のAffineレイヤとLSTMレイヤにEncoderの出力hを与え、8つのレイヤで共有する。<br>
 2つのベクトルが入力される場合、結合されたものになる。<br>
 [ch07/peeky_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/peeky_seq2seq.py)<br>
