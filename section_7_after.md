@@ -37,11 +37,14 @@ class Decoder:
     def __init__(self, vocab_size, wordvec_size, hidden_size):
         V, D, H = vocab_size, wordvec_size, hidden_size
         rn = np.random.randn
-
+        
+        #Time Embeding
         embed_W = (rn(V, D) / 100).astype('f')
+        #Time LSTM
         lstm_Wx = (rn(D, 4 * H) / np.sqrt(D)).astype('f')
         lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
         lstm_b = np.zeros(4 * H).astype('f')
+        #Time Affine
         affine_W = (rn(H, V) / np.sqrt(H)).astype('f')
         affine_b = np.zeros(V).astype('f')
 
@@ -108,7 +111,7 @@ class Seq2seq(BaseModel):
         self.encoder = Encoder(V, D, H)
         self.decoder = Decoder(V, D, H)
         self.softmax = TimeSoftmaxWithLoss()
-
+        #つなぐ
         self.params = self.encoder.params + self.decoder.params
         self.grads = self.encoder.grads + self.decoder.grads
 
@@ -117,6 +120,7 @@ class Seq2seq(BaseModel):
 
         h = self.encoder.forward(xs)
         score = self.decoder.forward(decoder_xs, h)
+        #損失計算
         loss = self.softmax.forward(score, decoder_ts)
         return loss
 
@@ -204,14 +208,14 @@ for epoch in range(max_epoch):
 - 57+5   →   5+75
 - 628+521 → 125+826
 - 220 + 8 → 8 + 022
-学習用のコードにデータセットを読みこみ、コードを追加
+学習用のコードにデータセットを読みこみ、コードを追加（サンプルコード参照）
 ```
 # is_reverse = FalseをTrueに変更
 is_reverse = True  # 
 ```
 図7-24<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
-koyaman環境では最終的にacc 54.080%<br>
+koyaman環境では最終的にacc 54.080%になった<br>
 <br>
 改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい
 - 「吾輩は猫である」→「I am a cat」
@@ -222,7 +226,7 @@ koyaman環境では最終的にacc 54.080%<br>
 Encoderに再度注目。Encoderは入力分を固定長のベクトルhに変換するが、LSTMだけがhを使っているのでもっと使うように活用する。<br>
 hを活用<br>
 図7-26<br>
-![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/.png)<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-26.png)<br>
 すべての時刻のAffineレイヤとLSTMレイヤにEncoderの出力hを与え、8つのレイヤで共有する。<br>
 2つのベクトルが入力される場合、結合されたものになる。<br>
 [ch07/peeky_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/peeky_seq2seq.py)<br>
@@ -284,7 +288,7 @@ PeekySeq2seqはSeq2seqとほぼ同様<br>
 Decoderレイヤのみ異なる<br>
 [ch07/peeky_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/peeky_seq2seq.py)<br>
 
-train_seq2seq.pyのseq2seqをPeelySeq2seqに変更
+サンプルコードtrain_seq2seq.pyのseq2seqをPeelySeq2seqに変更
 ```
 # L33とL34のコメントアウトを入れ替え
 # model = Seq2seq(vocab_size, wordvec_size, hideen_size)
@@ -293,7 +297,7 @@ model = PeekySeq2seq(vocab_size, wordvec_size, hideen_size)
 結果めっちゃ改善する。<br>
 図7-28<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/peeky.png)<br>
-※koyaman環境では最終的に97.600%<br>
+※koyaman環境では最終的に97.600%になった<br>
 
 ## 7.5 seq2seqを用いたアプリケーション
 seq2seqは「ある時系列データ」→「別の時系列データ」に変換する。
