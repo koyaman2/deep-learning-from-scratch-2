@@ -274,11 +274,11 @@ forward()の実装
         self.cache = H
         return score
 ```
+<br>
 - hをnp.repeat()で時系列分複製し、それをhsにする。
 - hsをEmbeddingレイヤの出力とnp.concatenate()で連結
 - 連結したものをLSTMレイヤの入力にする
 <br>※Affineレイヤでも同様にする。<br>
-<br>
 PeekySeq2seqはSeq2seqとほぼ同様<br>
 Decoderレイヤのみ異なる<br>
 [ch07/peeky_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/peeky_seq2seq.py)<br>
