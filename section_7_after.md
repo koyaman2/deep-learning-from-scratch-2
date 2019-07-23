@@ -200,7 +200,7 @@ for epoch in range(max_epoch):
 ※このメソッドは、問題をモデルに与えて文字列生成を行わせ、それが答えと合っているかどうかを判定する。<br>
 　モデルの出す答えが合っていれば1を返し、間違っていれば0を返す。<br>
  <br>
-こんな結果が表示。(acc 7.720%)<br> 
+こんな結果が表示。（acc 7.720%）<br> 
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/normal.png)<br>
  
 ## 7.4 seq2seqの改良
@@ -217,7 +217,7 @@ for epoch in range(max_epoch):
 is_reverse = True  # 
 ```
 <br>
-[alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
+![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/reverse.png)<br>
 koyaman環境では最終的にacc 54.080%になった<br>
 <br>
 改善する理由は論理的ではないが勾配の伝播がスムーズになるのが理由っぽい
@@ -230,6 +230,7 @@ koyaman環境では最終的にacc 54.080%になった<br>
 Encoderに再度注目。Encoderは入力分を固定長のベクトルhに変換するが、LSTMだけがhを使っているのでもっと使うように活用する。<br>
 こんな感じにhを活用（AffineレイヤとLSTMレイヤにhを与える）図7-26<br>
 ![alt](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/7-26.png)<br>
+<br>
 2つのベクトルが入力される場合、結合されたものになる。<br>
 [ch07/peeky_seq2seq.py](https://github.com/koyaman2/deep-learning-from-scratch-2/blob/master/ch07/peeky_seq2seq.py)<br>
 PeekyDecoderの初期化はDecoderとほとんど同じ<br>
